@@ -13,7 +13,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
- * This class is responsible for implements the service for managing the PGN format.
+ * This class is responsible for implements the service for managing the PGN format
+ * and conversions between algebraic coordinates and standard algebraic notation.
  *
  * <p><a href="https://en.wikipedia.org/wiki/Portable_Game_Notation">...</a>
  */
@@ -33,7 +34,8 @@ public class PGNServiceImpl implements PGNService {
 
 
     /**
-     * This method is a base method: it´s convert Position notation to algebraic.
+     * This method converts algebraic coordinates (e.g., e2, e4)
+     * into standard algebraic notation (e.g., e4, Nf3)
      * Example: c2 e5 : Ne5
      *
      * @param from       The starting position of the piece.
@@ -224,6 +226,15 @@ public class PGNServiceImpl implements PGNService {
     // https://regex101.com/
     // because the board can have more than one piece from the to position
     // INMO this method do not have to validate the move, it's the chess rules that must do it, only should transform the notation to a list of positions
+
+    /**
+     * This method converts  standard algebraic notation (e.g., e4, Nf3)
+     * into algebraic coordinates (e.g., e2, e4) to allow moves to be made
+     * on the board.
+     * @param move  The move in standard algebraic notation.
+     * @param board The current state of the chessboard.
+     * @return A response indicating the different parts of the move.
+     */
     @Override
     public PosChessMove fromAlgebraic(String move, ChessBoard board) {
 

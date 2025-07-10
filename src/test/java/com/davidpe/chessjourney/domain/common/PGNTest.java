@@ -30,6 +30,10 @@ public class PGNTest {
 
   PGNService pgnService = PGNServiceFactory.getPGNService();
 
+  /**
+   * This test converts  standard algebraic notation (e.g., e4, Nf3)
+   * into algebraic coordinates (e.g., e2, e4)
+   */
   @Test
   public void fromAlgebraicTest() {
 
