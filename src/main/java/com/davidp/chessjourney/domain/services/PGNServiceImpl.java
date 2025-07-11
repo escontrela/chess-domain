@@ -231,14 +231,15 @@ public class PGNServiceImpl implements PGNService {
      * This method converts  standard algebraic notation (e.g., e4, Nf3)
      * into algebraic coordinates (e.g., e2, e4) to allow moves to be made
      * on the board.
+     *
      * @param move  The move in standard algebraic notation.
      * @param board The current state of the chessboard.
      * @return A response indicating the different parts of the move.
      */
     @Override
-    public PosChessMove fromAlgebraic(String move, ChessBoard board) {
+    public GameMove fromAlgebraic(String move, ChessBoard board) {
 
-        PosChessMove posChessMove = null;
+        GameMove toret = null;
         boolean isCheck = false;
         boolean isMate = false;
         boolean isPromotion = false;
@@ -296,8 +297,8 @@ public class PGNServiceImpl implements PGNService {
                 throw new IllegalArgumentException("Not valid move found for castling notation: " + move);
             }
 
-            PosChessMove.PieceMove kingMove = new PosChessMove.PieceMove(kingFrom, kingTo);
-            PosChessMove.PieceMove rookMove = new PosChessMove.PieceMove(rookFrom, rookTo);
+            BoardMove kingMove = new BoardMove(kingFrom, kingTo);
+            BoardMove rookMove = new BoardMove(rookFrom, rookTo);
 
 
             // now we are gone test check or checkmate
@@ -312,10 +313,10 @@ public class PGNServiceImpl implements PGNService {
                 }
             }
 
-            posChessMove = new PosChessMove(List.of(kingMove, rookMove), isCapture, isCheck, isMate, isCastling, isPromotion, promotionPiece, isEnPassant);
+            toret = GameMoveFactory.createCastlingMove(kingMove, rookMove, isCheck, isMate);
         }
 
-        return posChessMove;
+        return toret;
     }
 
     /**

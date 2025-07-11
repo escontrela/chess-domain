@@ -7,14 +7,11 @@ import com.davidp.chessjourney.domain.common.*;
 import com.davidp.chessjourney.domain.services.PGNService;
 import com.davidp.chessjourney.domain.services.PGNServiceFactory;
 import com.davidp.chessjourney.domain.services.PGNServiceImpl;
-import com.davidp.chessjourney.domain.services.PosChessMove;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,12 +42,36 @@ public class PGNTest {
     ChessRules chessrules = new ChessRules();
 
     //Castling test
-    PosChessMove posChessMove = pgnService.fromAlgebraic("O-O", chessBoard);
+    GameMove posChessMove = pgnService.fromAlgebraic("O-O", chessBoard);
 
-    assertEquals(posChessMove.getPrimaryMove().getFrom().toString(),"E1");
-    assertEquals(posChessMove.getPrimaryMove().getTo().toString(),"G1");
-    assertTrue(posChessMove.isCastling());
+    /*
+     * Se podría hacer también (si bien se opta por el método en la interfaz) :
+     * if (posChessMove instanceof CastlingMove castle) {
+     *     // dentro de este bloque `castle` ya está tipado
+     *     assertEquals("E1", castle.kingMove().from().toString());
+     *     assertEquals("G1", castle.kingMove().to().toString());
+     *     assertEquals("H1", castle.rookMove().from().toString());
+     *     assertEquals("F1", castle.rookMove().to().toString());
+     * } else {
+     *     fail("Se esperaba un CastlingMove");
+     * }
+     *
+     * También se aceptar switch:
+     * GameMove mv = Factory.createCastlingMove(CastlingType.KINGSIDE, true, false);
+        switch (mv) {
+          case CastlingMove cm -> handleCastling(cm);
+          case NormalMove nm   -> handleNormal(nm);
+     * }
+     */
 
+    CastlingMove castle = posChessMove
+            .asCastling()
+            .orElseThrow(() -> new AssertionError("No es CastlingMove"));
+
+    assertEquals("E1", castle.kingMove().getFrom().toString());
+    assertEquals("G1", castle.kingMove().getTo().toString());
+    assertEquals("H1", castle.rookMove().getFrom().toString());
+    assertEquals("F1", castle.rookMove().getTo().toString());
   }
 
 
