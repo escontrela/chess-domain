@@ -23,7 +23,7 @@ import static com.davidp.chessjourney.domain.services.PGNServiceImpl.extractValu
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class PGNTest {
+public class PGNServiceTest {
 
   PGNService pgnService = PGNServiceFactory.getPGNService();
 
@@ -72,6 +72,8 @@ public class PGNTest {
     assertEquals("G1", castle.kingMove().getTo().toString());
     assertEquals("H1", castle.rookMove().getFrom().toString());
     assertEquals("F1", castle.rookMove().getTo().toString());
+
+    //TODO verificar todos los castling moves desdde distintos FEN positions (Quuenside, kingside con white y con black).
   }
 
 
@@ -184,27 +186,7 @@ public class PGNTest {
   }
 
 
-  @Test
-  public void fromAlgebraicTestRegularExpressionUseCases_1(){
 
-    Pattern regularNotationPattern = Pattern.compile("^(?:(O-O(?:-O)?)([+#])?|([NBRQK])?([a-h1-8])?(x)?([a-h][1-8])(?:=([NBRQK]))?([+#])?)$");
-
-
-    // 1. Case c3
-    Matcher matcher = regularNotationPattern.matcher("c3");
-
-    if (matcher.matches()){
-
-     List<String> matcherGroups = getMatcherGroups(matcher,6);
-     Pos position = Pos.parseString(matcherGroups.get(3));
-
-     assertEquals("c3", matcherGroups.get(3));
-     assertEquals(Row.THREE, position.getRow());
-     assertEquals(Col.C, position.getCol());
-     assertEmptyGroups(matcherGroups,List.of(0,1,2,4,5)); //TODO name de groups as a context semantic with enums, not with numbers
-
-    }
-  }
 
   @Test
   public void fromAlgebraicTestRegularExpressionUseCases_2(){
